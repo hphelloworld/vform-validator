@@ -1,0 +1,23 @@
+{
+  "name": "vform-validator",
+  "version": "1.0.0",
+  "description": "Form validation for Vue.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vue",
+    "vue-components",
+    "component",
+    "components",
+    "vue-form",
+    "form-validator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hphelloworld/vform-validator.git"
+  },
+  "author": "hphelloworld",
+  "license": "ISC"
+}
