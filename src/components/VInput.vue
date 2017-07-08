@@ -70,22 +70,19 @@ export default {
         this.tipsFuc(this.checkdata);
       } else {
         console.log(this.checkdata);
-        // this.$vux.toast.show({
-        //   text: this.checkdata.tipmsg,
-        //   type: 'text',
-        //   width: 'auto',
-        //   position: 'bottom'
-        // })
       }
     },
     valchange(e) {
       this.check(e.target)
+      this.tips()
     },
     valinput(e) {
       this.check(e.target)
+      this.tips()
     },
     valblur(e) {
       this.check(e.target)
+      this.tips()
     },
     check(el) {
       this.elment = el;
@@ -113,7 +110,7 @@ export default {
       } else {
         val = el.value;
       }
-      if (!this.validate) {
+      if (this.validate == undefined) {
         this.checkdata = {
           elment: this.elment,
           value: val,
