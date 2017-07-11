@@ -1,27 +1,3 @@
-# vform-validator
-Form validation for Vue.js
-
-## Install
-
-[NPM](https://www.npmjs.com/)
-```sh
-npm install vform-validator --save-dev
-```
-
-## Quick Start
-
-#### main.js
-
-``` javascript
-import Vue from 'vue'
-import VFormValidator from 'vform-validator'
-
-Vue.use(VFormValidator)
-```
-
-#### App.vue
-
-```html
 <template>
   <v-form :submit="submitForm">
     <div>
@@ -83,25 +59,9 @@ export default {
   }
 }
 </script>
-```
 
-
-#### Attributes
-
-* type: The type of form
-
-* validate: Form validation method(String,RegExp or Function)
-
-* checkmethod: Form validation timing(change,blur or input)
-
-* errormsg: Verify the wrong prompt
-
-* nullmsg: Verification is empty
-
-* successmsg: Verification of successful prompts
-
-#### Methods
-
-* tipsFuc: Validation of the callback
-
-* submit: Form submission of the callback
+<style>
+input {
+  -webkit-appearance: auto;
+}
+</style>

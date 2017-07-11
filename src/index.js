@@ -1,7 +1,7 @@
 const VInput = require('./components/VInput.vue')
 const VForm = require('./components/VForm.vue')
-let VueForm;
-VueForm = {
+
+module.exports = {
   install: (Vue) => {
     Vue.mixin({
       components: {
@@ -11,4 +11,3 @@ VueForm = {
     })
   }
 }
-module.exports = VueForm
