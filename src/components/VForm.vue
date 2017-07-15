@@ -9,7 +9,7 @@ export default {
   name: 'vform',
   data() {
     return {
-      checkdata: [],
+      checkdata: {},
       checksuccess: false
     }
   },
@@ -27,8 +27,8 @@ export default {
       for (let i = 0, l = this.$children.length; i < l; i++) {
         let elv = this.$children[i];
         elv.check(elv.$el);
-        this.checkdata[elv.$el.name] = elv.checkdata.value;
-        if (elv.checkdata.status !== 'success') {
+        this.checkdata[elv.$el.name] = elv.val;
+        if (elv.status !== 'success') {
           this.checksuccess = false;
           elv.tips()
           break;
@@ -36,9 +36,10 @@ export default {
           this.checksuccess = true;
         }
       }
-      if (this.checksuccess) {
-        this.submit(this.checkdata);
-      }
+      this.submit({
+        status: this.checksuccess,
+        data: this.checkdata
+      });
     }
   }
 }

@@ -1,6 +1,5 @@
-const VInput = require('./components/VInput.vue')
-const VForm = require('./components/VForm.vue')
-
+import VInput from './components/VInput.vue'
+import VForm from './components/VForm.vue'
 module.exports = {
   install: (Vue) => {
     Vue.mixin({

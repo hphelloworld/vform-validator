@@ -92,7 +92,7 @@ export default {
 
 * validate: Form validation method(String,RegExp or Function)
 
-* checkmethod: Form validation timing(change,blur or input)
+* checkmethod: Form validation timing(change or input)
 
 * errormsg: Verify the wrong prompt
 

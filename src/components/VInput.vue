@@ -1,11 +1,11 @@
 <template>
-  <select v-if="type=='select'" @change="valchange($event)">
+  <select v-if="type=='select'" :value="value" @change="valchange($event)">
     <slot></slot>
   </select>
-  <textarea v-else-if="type=='textarea'" @input="checkmethod=='input'?valinput($event):''" @change="checkmethod=='change'?valchange($event):''" @blur="checkmethod=='blur'?valblur($event):''">
+  <textarea v-else-if="type=='textarea'" :value="value" @input="checkmethod=='input'?valinput($event):''" @change="checkmethod=='change'?valchange($event):''" @blur="checkmethod=='blur'?valblur($event):''">
   </textarea>
-  <input v-else-if="type=='radio'||type=='checkbox'" :type="type" @change="valchange($event)">
-  <input v-else :type="type" @input="checkmethod=='input'?valinput($event):''" @change="checkmethod=='change'?valchange($event):''" @blur="checkmethod=='blur'?valblur($event):''">
+  <input v-else-if="type=='radio'||type=='checkbox'" :value="value" :type="type" @change="valchange($event)">
+  <input v-else :type="type" :value="value" @input="checkmethod=='input'?valinput($event):''" @change="checkmethod=='change'?valchange($event):''">
 </template>
   
 <script>
@@ -29,8 +29,10 @@ export default {
         "money": /^-?[1-9]+(\.\d+)?$|^-?0(\.\d+)?$|^-?[1-9]+[0-9]*(\.\d+)?$/,
         "f": /^[0-9]+(.[0-9]{0,9})?$/
       },
-      checkdata: {},
-      elment: ''
+      elment: '',
+      status: '',
+      tipmsg: '',
+      val: []
     }
   },
   props: {
@@ -39,13 +41,14 @@ export default {
       type: String,
       default: 'text'
     },
+    value: {
+      type: [String, Number, Boolean, Array],
+      default: ''
+    },
     // 验证规则，可以使用内置的验证规则，或自定义的正则和方法，使用方法时需同步返回true或false来表示验证成功与否
     validate: [String, Function, RegExp],
-    // 规定何时验证，默认是在blur，可以是change或input，当type类型为radio，checkbox或select时使用change
-    checkmethod: {
-      type: String,
-      default: 'blur'
-    },
+    // 规定何时验证，可以是change或input，当type类型为radio，checkbox或select时使用change
+    checkmethod: String,
     // 验证后的回调函数，会返回一个对象参数，elment代表验证的元素dom，value验证值，status验证后的状态，tipmsg提示语
     tipsFuc: Function,
     // 验证错误时的提示语
@@ -67,9 +70,12 @@ export default {
   methods: {
     tips() {
       if (Object.prototype.toString.call(this.tipsFuc) == '[object Function]') {
-        this.tipsFuc(this.checkdata);
-      } else {
-        console.log(this.checkdata);
+        this.tipsFuc({
+          elment: this.elment,
+          value: this.val,
+          status: this.status,
+          tipmsg: this.tipmsg
+        });
       }
     },
     valchange(e) {
@@ -77,10 +83,6 @@ export default {
       this.tips()
     },
     valinput(e) {
-      this.check(e.target)
-      this.tips()
-    },
-    valblur(e) {
       this.check(e.target)
       this.tips()
     },
@@ -97,80 +99,54 @@ export default {
         } while (parent_form.nodeName != 'FORM');
         let all_input = parent_form.querySelectorAll('input[name=' + input_name + ']');
         [].forEach.call(all_input, (e) => {
-          if (e.type == 'radio') {
-            if (e.checked) {
-              val = e.value;
-            }
-          } else {
-            if (e.checked) {
-              val.push(e.value)
+          if (e.checked) {
+            if (e.type == 'radio') {
+              this.val = e.value;
+            } else {
+              this.val.push(e.value)
             }
           }
         })
       } else {
-        val = el.value;
+        this.val = el.value;
       }
       if (this.validate == undefined) {
-        this.checkdata = {
-          elment: this.elment,
-          value: val,
-          status: 'success',
-          tipmsg: this.successmsg
-        }
+        this.status = 'success';
+        this.tipmsg = this.successmsg;
         return;
       };
-      if (val.toString().trim() == '') {
-        this.checkdata = {
-          elment: this.elment,
-          value: val,
-          status: 'empty',
-          tipmsg: this.nullmsg
-        }
+      if (this.val.toString().trim() == '') {
+        this.status = 'empty';
+        this.tipmsg = this.nullmsg;
         return;
       }
       let validate_type = Object.prototype.toString.call(this.validate);
       switch (validate_type) {
         case '[object String]':
-          this.regcheck(val, this.checkreg[this.validate])
+          this.regcheck(this.checkreg[this.validate])
           break;
         case '[object RegExp]':
-          this.regcheck(val, this.validate)
+          this.regcheck(this.validate)
           break;
         case '[object Function]':
-          let check_bl = this.validate(val);
+          let check_bl = this.validate(this.val);
           if (!check_bl) {
-            this.checkdata = {
-              elment: this.elment,
-              value: val,
-              status: 'error',
-              tipmsg: this.errormsg
-            }
+            this.status = 'error';
+            this.tipmsg = this.errormsg;
           } else {
-            this.checkdata = {
-              elment: this.elment,
-              value: val,
-              status: 'success',
-              tipmsg: this.successmsg
-            }
+            this.status = 'success';
+            this.tipmsg = this.successmsg;
           }
           break;
       }
     },
-    regcheck(val, reg) {
-      if (!reg.test(val)) {
-        this.checkdata = {
-          elment: this.elment,
-          value: val,
-          status: 'error',
-          tipmsg: this.errormsg
-        }
+    regcheck(reg) {
+      if (!reg.test(this.val)) {
+        this.status = 'error';
+        this.tipmsg = this.errormsg;
       } else {
-        this.checkdata = {
-          elment: this.elment,
-          value: val,
-          status: 'success',
-          tipmsg: this.successmsg
-        }
+        this.status = 'success';
+        this.tipmsg = this.successmsg;
       }
     }
   }
