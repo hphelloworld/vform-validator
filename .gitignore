@@ -5,6 +5,5 @@ node_modules/
 .settings
 npm-debug.log
 *.log
-examples/dist/
-dist/
 .vscode
+.gitignore
