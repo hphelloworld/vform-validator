@@ -2,10 +2,10 @@
   <select v-if="type=='select'" :value="value" @change="valchange($event)">
     <slot></slot>
   </select>
-  <textarea v-else-if="type=='textarea'" :value="value" @input="checkmethod=='input'?valinput($event):''" @change="checkmethod=='change'?valchange($event):''" @blur="checkmethod=='blur'?valblur($event):''">
+  <textarea v-else-if="type=='textarea'" :value="value" @input="checkmethod=='input'?valchange($event):''" @change="checkmethod=='change'?valchange($event):''">
   </textarea>
-  <input v-else-if="type=='radio'||type=='checkbox'" :value="value" :type="type" @change="valchange($event)">
-  <input v-else :type="type" :value="value" @input="checkmethod=='input'?valinput($event):''" @change="checkmethod=='change'?valchange($event):''">
+  <input v-else-if="type=='radio'||type=='checkbox'"  :value="value" :type="type" @change="valchange($event)">
+  <input v-else :type="type" :value="value" @input="checkmethod=='input'?valchange($event):''" @change="checkmethod=='change'?valchange($event):''">
 </template>
   
 <script>
@@ -82,10 +82,6 @@ export default {
       this.check(e.target)
       this.tips()
     },
-    valinput(e) {
-      this.check(e.target)
-      this.tips()
-    },
     check(el) {
       this.elment = el;
       let val = [];
@@ -109,6 +105,7 @@ export default {
         })
       } else {
         this.val = el.value;
+        this.$emit('input', this.val);
       }
       if (this.validate == undefined) {
         this.status = 'success';

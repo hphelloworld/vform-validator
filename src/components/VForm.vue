@@ -26,14 +26,16 @@ export default {
       this.checkdata = {};
       for (let i = 0, l = this.$children.length; i < l; i++) {
         let elv = this.$children[i];
-        elv.check(elv.$el);
-        this.checkdata[elv.$el.name] = elv.val;
-        if (elv.status !== 'success') {
-          this.checksuccess = false;
-          elv.tips()
-          break;
-        } else {
-          this.checksuccess = true;
+        if (elv.name == 'vinput' && elv.type != 'submit') {
+          elv.check(elv.$el);
+          this.checkdata[elv.$el.name] = elv.val;
+          if (elv.status !== 'success') {
+            this.checksuccess = false;
+            elv.tips()
+            break;
+          } else {
+            this.checksuccess = true;
+          }
         }
       }
       this.submit({

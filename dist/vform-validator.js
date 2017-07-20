@@ -201,14 +201,16 @@ exports.default = {
       this.checkdata = {};
       for (var i = 0, l = this.$children.length; i < l; i++) {
         var elv = this.$children[i];
-        elv.check(elv.$el);
-        this.checkdata[elv.$el.name] = elv.val;
-        if (elv.status !== 'success') {
-          this.checksuccess = false;
-          elv.tips();
-          break;
-        } else {
-          this.checksuccess = true;
+        if (elv.name == 'vinput' && elv.type != 'submit') {
+          elv.check(elv.$el);
+          this.checkdata[elv.$el.name] = elv.val;
+          if (elv.status !== 'success') {
+            this.checksuccess = false;
+            elv.tips();
+            break;
+          } else {
+            this.checksuccess = true;
+          }
         }
       }
       this.submit({
@@ -302,10 +304,6 @@ exports.default = {
       this.check(e.target);
       this.tips();
     },
-    valinput: function valinput(e) {
-      this.check(e.target);
-      this.tips();
-    },
     check: function check(el) {
       var _this = this;
 
@@ -331,6 +329,7 @@ exports.default = {
         });
       } else {
         this.val = el.value;
+        this.$emit('input', this.val);
       }
       if (this.validate == undefined) {
         this.status = 'success';
@@ -398,13 +397,10 @@ module.exports = { render: function render() {
       },
       on: {
         "input": function input($event) {
-          _vm.checkmethod == 'input' ? _vm.valinput($event) : '';
+          _vm.checkmethod == 'input' ? _vm.valchange($event) : '';
         },
         "change": function change($event) {
           _vm.checkmethod == 'change' ? _vm.valchange($event) : '';
-        },
-        "blur": function blur($event) {
-          _vm.checkmethod == 'blur' ? _vm.valblur($event) : '';
         }
       }
     }) : _vm.type == 'radio' || _vm.type == 'checkbox' ? _c('input', {
@@ -428,7 +424,7 @@ module.exports = { render: function render() {
       },
       on: {
         "input": function input($event) {
-          _vm.checkmethod == 'input' ? _vm.valinput($event) : '';
+          _vm.checkmethod == 'input' ? _vm.valchange($event) : '';
         },
         "change": function change($event) {
           _vm.checkmethod == 'change' ? _vm.valchange($event) : '';
