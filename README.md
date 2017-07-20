@@ -27,8 +27,8 @@ Vue.use(VFormValidator)
 		<div>
 			<v-input type="text" name="username" v-model="username" checkmethod="change" nullmsg="empty" errormsg="error" successmsg="success" validate="s6-18" :tipsFuc="tips"></v-input>
 		</div>
-		 <div>
-			<v-input type="select" name="userage" :validate="checkval" :tipsFuc="tips" checkmethod="change" >
+		<div>
+			<v-input type="select" name="userage" :validate="checkval" :tipsFuc="tips" checkmethod="change">
 				<option value="10">10</option>
 				<option value="20">20</option>
 				<option value="30">30</option>
@@ -37,7 +37,7 @@ Vue.use(VFormValidator)
 			</v-input>
 		</div>
 		<div>
-			<v-input type="textarea" name="url" checkmethod="input" :tipsFuc="tips" v-model="textarea" validate="s" placeholder="test"></v-input>
+			<v-input type="textarea" name="phone" checkmethod="input" :tipsFuc="tips" v-model="textarea" validate="s" placeholder="test"></v-input>
 		</div>
 		<div>
 			<v-input type="radio" name="gender" validate="*" value="0" :tipsFuc="tips"></v-input>man
@@ -52,16 +52,17 @@ Vue.use(VFormValidator)
 		</div>
 		<div>
 			<v-input type="submit"></v-input>
-		</div> 
+		</div>
 	</v-form>
 </template>
 
 <script>
-
+import VInput from "../src/components/VInput"
+import VForm from "../src/components/VForm"
 export default {
 	data() {
 		return {
-			username:'huang',
+			username: 'foo',
 			textarea: '',
 			user: {
 				name: '',
@@ -88,39 +89,6 @@ export default {
 			console.log(data);
 		}
 	}
-}
-</script>
-
-<style>
-
-</style>
-
-
-<script>
-export default {
-  data() {
-    return {
-      user: {
-        name: '',
-        email: ''
-      }
-    }
-  },
-  methods: {
-    submitForm(data) {
-      console.log(data);
-    },
-    checkval(val) {
-      if (val < 30) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    tips(data) {
-      console.log(data);
-    }
-  }
 }
 </script>
 ```
